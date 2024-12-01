@@ -27,7 +27,7 @@ def two() -> int:
     Once again consider your left and right lists. What is their similarity score?
     """
     total = 0
-    counter_l2 = dict(Counter(l2))
+    counter_l2 = Counter(l2)
     for i in l1:
         total += i * counter_l2.get(i, 0)
     return total
