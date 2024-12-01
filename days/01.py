@@ -1,5 +1,5 @@
 from get_day_input import get_input
-
+from collections import Counter
 
 data = get_input(day=1).splitlines()
 
@@ -24,8 +24,13 @@ def one() -> int:
 
 def two() -> int:
     """
+    Once again consider your left and right lists. What is their similarity score?
     """
-    pass
+    total = 0
+    counter_l2 = dict(Counter(l2))
+    for i in l1:
+        total += i * counter_l2.get(i, 0)
+    return total
 
 
 print(f"1. {one()}")
