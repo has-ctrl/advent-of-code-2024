@@ -16,6 +16,7 @@ def one() -> int:
 
 def two() -> int:
     """
+    Handle the new instructions; what do you get if you add up all of the results of just the enabled multiplications?
     """
     count = 0
     enabled = True
