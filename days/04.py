@@ -2,7 +2,7 @@ from get_day_input import get_input
 
 
 data = get_input(day=4).splitlines()
-XMAS = ("XMAS", "SAMX")
+XMAS, MAS = ("XMAS", "SAMX"), ("MAS", "SAM")
 MAX_SIZE = len(data[0]) - 1
 
 
@@ -68,8 +68,19 @@ def one() -> int:
 
 def two() -> int:
     """
+    Flip the word search from the instructions back over to the word search side and try again. How many times does an
+    X-MAS appear?
     """
-    return 0
+    count = 0
+    for j, line in enumerate(data):
+        for i, char in enumerate(line):
+            if 0 in (i, j) or MAX_SIZE in (i, j):
+                continue
+            if char == "A":
+                lu, ru, rd, ld = data[j-1][i-1], data[j-1][i+1], data[j+1][i+1], data[j+1][i-1]
+                if f"{lu}A{rd}" in MAS and f"{ru}A{ld}" in MAS:
+                    count += 1
+    return count
 
 
 print(f"1. {one()}")
