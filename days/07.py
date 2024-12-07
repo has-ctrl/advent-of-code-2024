@@ -4,28 +4,30 @@ from itertools import product
 data = get_input(day=7).splitlines()
 
 
-OPERATORS = ["*", "+"]
+def _parse_input(equation: str) -> tuple[int, list[str]]:
+    sub_total, values = equation.split(":")
+    return int(sub_total), values.split()
 
 
-def one() -> int:
+def one(operators_input: tuple[str] = ("*", "+")) -> int:
     """
     Determine which equations could possibly be true. What is their total calibration result?
     """
     total = 0
     for equation in data:
-        sub_total, values = equation.split(":")
-        sub_total = int(sub_total)
-        values = [int(v) for v in values.split()]
-        operator_config = list(product(OPERATORS, repeat=len(values)-1))
+        sub_total, values = _parse_input(equation)
+        operator_config = list(product(operators_input, repeat=len(values)-1))
         for operators in operator_config:
             count = 0
             for i, (x, y) in enumerate(zip(values, values[1:])):
-                if i == 0:
-                    count += x
-                if operators[i] == "+":
-                    count += y
-                elif operators[i] == "*":
-                    count *= y
+                operator = operators[i]
+                count += int(x) if i == 0 else 0
+                if operator == "||":
+                    count = int(str(count) + y)
+                elif operator == "+":
+                    count += int(y)
+                elif operator == "*":
+                    count *= int(y)
                 if count > sub_total:
                     break
             if count == sub_total:
@@ -34,10 +36,12 @@ def one() -> int:
     return total
 
 
-def two() -> int:
+def two(operators_input: tuple[str] = ("||", "*", "+")) -> int:
     """
+    Using your new knowledge of elephant hiding spots, determine which equations could possibly be true. What is their
+    total calibration result?
     """
-    return 0
+    return one(operators_input)
 
 
 print(f"1. {one()}")
