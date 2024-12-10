@@ -38,7 +38,8 @@ def one(track_distinct_paths: bool = False) -> int:
                         if new not in visited:
                             queue.append(new)
                             visited.add(new)
-                        distinct_paths[(new_x, new_y)] = distinct_paths.get((new_x, new_y), 0) + distinct_paths.get((x, y), 0)
+                        distinct_paths[(new_x, new_y)] = \
+                            distinct_paths.get((new_x, new_y), 0) + distinct_paths.get((x, y), 0)
     return count
 
 
