@@ -1,5 +1,4 @@
 from get_day_input import get_input
-from itertools import pairwise
 
 data = get_input(day=9)
 
@@ -11,7 +10,7 @@ def one() -> int:
     s = list()
     for i, char in enumerate(data):
         if i % 2:
-            s += ['.' for _ in range(int(char))]
+            s += ["." for _ in range(int(char))]
         else:
             s += [str(i // 2) for _ in range(int(char))]
 
@@ -29,8 +28,40 @@ def one() -> int:
 
 def two() -> int:
     """
+    Start over, now compacting the amphipod's hard drive using this new method instead. What is the resulting filesystem
+    checksum?
     """
-    return 0
+    s = list()
+    for i, char in enumerate(data):
+        if char == '0':
+            continue
+        if i % 2:
+            s += [tuple("." for _ in range(int(char)))]
+        else:
+            s += [tuple(str(i // 2) for _ in range(int(char)))]
+
+    space_idxs, fill_idxs = {}, {}
+    for i, tup in enumerate(s):
+        if not tup or "." in tup:
+            space_idxs[i] = len(tup)
+        else:
+            fill_idxs[i] = len(tup)
+
+    for file_idx, file_size in reversed(list(fill_idxs.items())):
+        for space_idx, space in space_idxs.items():
+            if space >= file_size and file_idx > space_idx:
+                if s[space_idx][0] == ".":
+                    s[space_idx], s[file_idx] = s[file_idx], s[space_idx]
+                else:
+                    s[space_idx] = s[space_idx][:len(s[space_idx]) - space] + s[file_idx]
+                    s[file_idx] = tuple(["." for _ in range(file_size)])
+                fill_idxs.pop(file_idx)
+                space_idxs[space_idx] = space - file_size
+                if space > file_size:
+                    s[space_idx] += tuple(["." for _ in range(space - file_size)])
+                    s[file_idx] = tuple(["." for _ in range(file_size)])
+                break
+    return sum([i * int(v) for i, v in enumerate([c for tup in s for c in tup]) if v != "."])
 
 
 print(f"1. {one()}")
