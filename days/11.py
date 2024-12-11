@@ -1,13 +1,14 @@
-import functools
 from get_day_input import get_input
 
 data = get_input(day=11)
+blink_dict = {}
 
 
-@functools.lru_cache(maxsize=None)
 def _calc_stones(stone: str, blinks: int) -> int:
     if blinks == 0:
         return 1
+    elif (stone, blinks) in blink_dict:
+        return blink_dict[(stone, blinks)]
 
     new_stones = []
     if stone == "0":
@@ -20,6 +21,8 @@ def _calc_stones(stone: str, blinks: int) -> int:
     stones = 0
     for new_stone in new_stones:
         stones += _calc_stones(new_stone, blinks-1)
+
+    blink_dict[(stone, blinks)] = stones
     return stones
 
 
