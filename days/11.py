@@ -4,6 +4,7 @@ from get_day_input import get_input
 data = get_input(day=11)
 
 
+@functools.lru_cache(maxsize=None)
 def _calc_stones(stone: str, blinks: int) -> int:
     if blinks == 0:
         return 1
@@ -34,8 +35,9 @@ def one(blinks: int = 25) -> int:
 
 def two() -> int:
     """
+    How many stones would you have after blinking a total of 75 times?
     """
-    return 0
+    return one(blinks=75)
 
 
 print(f"1. {one()}")
