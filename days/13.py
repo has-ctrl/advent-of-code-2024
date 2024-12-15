@@ -1,4 +1,5 @@
 import re
+import numpy as np
 
 from get_day_input import get_input
 
@@ -13,7 +14,7 @@ def one() -> int:
     total = 0
     for machine in data:
         machine_tokens = 0
-        a_x, a_y, b_x, b_y, p_x, p_y = [int(v) for v in re.findall("\d+", machine)]
+        a_x, a_y, b_x, b_y, p_x, p_y = [int(v) for v in re.findall(r"\d+", machine)]
         for a in range(100):
             remaining_x = p_x - a * a_x
             if remaining_x % b_x != 0:
@@ -28,8 +29,18 @@ def one() -> int:
 
 def two() -> int:
     """
+    Using the corrected prize coordinates, figure out how to win as many prizes as possible. What is the fewest tokens
+    you would have to spend to win all possible prizes?
     """
-    return 0
+    total = 0
+    for machine in data:
+        a_x, a_y, b_x, b_y, p_x, p_y = [int(v) for v in re.findall(r"\d+", machine)]
+        p_x, p_y = p_x + 10_000_000_000_000, p_y + 10_000_000_000_000
+        (a, b), *_ = np.linalg.lstsq(a=np.array([[a_x, b_x], [a_y, b_y]]), b=np.array([p_x, p_y]))
+        if abs(a - round(a)) < 1e-2 and abs(b - round(b)) < 1e-2:
+            if round(a * a_y + b * b_y) == p_y:
+                total += 3 * round(a) + 1 * round(b)
+    return total
 
 
 print(f"1. {one()}")
