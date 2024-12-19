@@ -1,20 +1,22 @@
-from functools import cache
-
 from get_day_input import get_input
 
 patterns, designs = get_input(day=19).split("\n\n")
 patterns = tuple(patterns.split(", "))
 designs = designs.splitlines()
+seen_dict = {}
 
 
-@cache
 def _match_design(d: str, ps: list[str]) -> int:
+    if d in seen_dict:
+        return seen_dict[d]
+
     count = 0
     for p in ps:
         if d.startswith(p):
             count += _match_design(d.removeprefix(p), ps)
         elif not d:
-            return 1
+            count = 1
+    seen_dict[d] = count
     return count
 
 
