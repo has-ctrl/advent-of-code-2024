@@ -8,14 +8,14 @@ designs = designs.splitlines()
 
 
 @cache
-def _match_design(d: str, ps: list[str]) -> bool:
+def _match_design(d: str, ps: list[str]) -> int:
+    count = 0
     for p in ps:
         if d.startswith(p):
-            if _match_design(d.removeprefix(p), ps):
-                return True
+            count += _match_design(d.removeprefix(p), ps)
         elif not d:
-            return True
-    return False
+            return 1
+    return count
 
 
 def one() -> int:
@@ -32,8 +32,13 @@ def one() -> int:
 
 def two() -> int:
     """
+    They'll let you into the onsen as soon as you have the list. What do you get if you add up the number of different
+    ways you could make each design?
     """
-    return 0
+    count = 0
+    for i, design in enumerate(designs):
+        count += _match_design(design, patterns)
+    return count
 
 
 print(f"1. {one()}")
