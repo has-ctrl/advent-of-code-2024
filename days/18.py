@@ -50,7 +50,7 @@ def two() -> tuple[int, int]:
     for steps in range(1024, 100_000):
         res = one(steps)
         if not isinstance(res, int):
-            return res[0], res[1]
+            return res
 
 
 print(f"1. {one()}")
