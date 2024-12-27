@@ -1,18 +1,21 @@
 import re
 from get_day_input import get_input
 
-registers, program = get_input(day=17).split("\n\n")
-registers = [int(d) for d in re.findall(r"\d+", registers)]
-program = [int(d) for d in re.findall(r"\d+", program)]
+r, p = get_input(day=17).split("\n\n")
+program = [int(d) for d in re.findall(r"\d+", p)]
 
 
-def one() -> str:
+def one(register_a_copy: int = None) -> str:
     """
     Using the information provided by the debugger, initialize the registers to the given values, then run the program.
     Once it halts, what do you get if you use commas to join the values it output into a single string?
     """
+    registers = [int(d) for d in re.findall(r"\d+", r)]
     pointer = 0
     out = []
+    if register_a_copy:
+        registers[0] = register_a_copy
+
     while pointer < len(program) - 1:
         opcode, literal_operand = program[pointer], program[pointer + 1]
         combo_operand = registers[literal_operand - 4] if literal_operand in (4, 5, 6) else literal_operand
@@ -41,8 +44,12 @@ def one() -> str:
 
 def two() -> int:
     """
+    What is the lowest positive initial value for register A that causes the program to output a copy of itself?
     """
-    return 0
+    copy_value = 0
+    for i in reversed(program):
+        copy_value = (copy_value + i) * 8
+    return copy_value
 
 
 print(f"1. {one()}")
