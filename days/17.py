@@ -13,7 +13,7 @@ def one(register_a_copy: int = None) -> str:
     registers = [int(d) for d in re.findall(r"\d+", r)]
     pointer = 0
     out = []
-    if register_a_copy:
+    if isinstance(register_a_copy, int):
         registers[0] = register_a_copy
 
     while pointer < len(program) - 1:
@@ -47,8 +47,12 @@ def two() -> int:
     What is the lowest positive initial value for register A that causes the program to output a copy of itself?
     """
     copy_value = 0
-    for i in reversed(program):
-        copy_value = (copy_value + i) * 8
+    for i, v in enumerate(reversed(program)):
+        copy_value *= 8
+        for j in range(8 + 1):
+            if one(copy_value + j) == p[-2 * i - 1:]:
+                copy_value += j
+                break
     return copy_value
 
 
